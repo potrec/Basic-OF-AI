@@ -34,6 +34,7 @@ def qualitative_to_0_1(data, column, value_to_be_1):
     return data
 
 def calculate_metrics(cm):
+    print(cm[TN], cm[FP], cm[FN], cm[TP])
     se = cm[TP] / (cm[TP] + cm[FN])
     p = cm[TP] / (cm[TP] + cm[FP])
     sp = cm[TN] / (cm[TN] + cm[FP])
@@ -50,11 +51,21 @@ def zad3(data):
     data = qualitative_to_0_1(data, 'Self_Employed', 'Yes')
     data = qualitative_to_0_1(data, 'Loan_Status', 'Y')
     print(data)
-def zad4(data):
+def zad4():
     from sklearn.model_selection import train_test_split
-    data=data.astype(np.float64)
-    X=data.drop('Loan_Status', axis=1)
-    y=data['Loan_Status']
+    data = pd.read_excel('practice_lab_3.xlsx')
+    columns = list(data.columns)
+    mask = data['Gender'].values == 'Female'
+    data.loc[mask, 'Gender'] = 1
+    data.loc[~mask, 'Gender'] = 0
+    cat_feature = pd.Categorical(data.Property_Area)
+    one_hot = pd.get_dummies(cat_feature)
+    data = pd.concat([data, one_hot], axis=1)
+    data = data.drop(columns=['Property_Area'])
+    col = list(data.columns)
+    X = data.drop(columns=('Loan_Status')).values.astype(float)
+    y = data['Loan_Status'].values.astype(float)
+
     X_train, X_test, y_train, y_test=train_test_split(X,y,test_size=0.2, random_state=42)
     from sklearn.neighbors import KNeighborsClassifier as kNN
     from sklearn.metrics import confusion_matrix
@@ -231,7 +242,7 @@ def zad7():
 # zad2(data)
 # zad3(data)
 # zad4()
-# zad5()
-# zad6()
-zad7()
+zad5()
+zad6()
+# zad7()
 
