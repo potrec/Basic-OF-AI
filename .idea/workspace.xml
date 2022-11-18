@@ -2,12 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f445a0fb-70be-4887-990f-099326d8cbc4" name="Changes" comment="">
+<<<<<<< Updated upstream
       <change afterPath="$PROJECT_DIR$/lab3/zad4.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/lab3/zad7.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/sus/drug200_cat.csv" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/sus/main.py" afterDir="false" />
+=======
+      <change afterPath="$PROJECT_DIR$/Test2/drift_database.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test2/gender_classification.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test2/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test2/main2.py" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab3/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab3/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,10 +52,15 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+<<<<<<< Updated upstream
       <recent name="C:\Users\potrec\Desktop\Pollub\Semestr5\Python\Basic-OF-SI\sus" />
       <recent name="C:\Users\potrec\Desktop\Pollub\Semestr5\Python\Basic-OF-SI\lab3" />
       <recent name="C:\Users\123lu\OneDrive\Pulpit\Pollub\Python\lab4" />
+=======
+>>>>>>> Stashed changes
       <recent name="C:\Users\123lu\OneDrive\Pulpit\Pollub\Python" />
+      <recent name="C:\Users\123lu\OneDrive\Pulpit\Pollub\Python\Test1" />
+      <recent name="C:\Users\123lu\OneDrive\Pulpit\Pollub\Python\lab4" />
       <recent name="C:\Users\123lu\OneDrive\Pulpit\Basic-OF-SI\lab3" />
     </key>
   </component>
