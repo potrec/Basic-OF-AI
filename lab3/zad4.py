@@ -88,3 +88,33 @@ printMetrics("SVM", confusion_matrix(y_test, y_pred), se, p, sp, acc, f1)
 #
 # se, p, sp, acc, f1 = calculate_metrics(cm_arr[1])
 # printMetrics("SVM", cm_arr[1], se, p, sp, acc, f1)
+
+def zad4():
+    def KNN():
+        TN = 7
+        FP = 26
+        FN = 17
+        TP = 73
+        sensivity = TP / (TP + FN)
+        precision = TP / (TP + FP)
+        specificity = TN / (FP + TN)
+        accuracy = (TP + TN) / (TP + FN + FP + TN)
+        f1 = (2 * sensivity * precision) / (sensivity + precision)
+        print(f"For kNN Sensivity: {sensivity}\nPrecision: {precision}\nSpecificity: {specificity}\nAccuracy: {accuracy}\nf1: {f1}\n")
+
+    def SVM():
+        TN = 0
+        FP = 33
+        FN = 0
+        TP = 90
+        sensivity = TP / (TP + FN)
+        precision = TP / (TP + FP)
+        specificity = TN / (FP + TN)
+        accuracy = (TP + TN) / (TP + FN + FP + TN)
+        f1 = (2 * sensivity * precision) / (sensivity + precision)
+        print(f"For SVN Sensivity: {sensivity}\nPrecision: {precision}\nSpecificity: {specificity}\nAccuracy: {accuracy}\nf1: {f1}\n")
+
+    KNN()
+    SVM()
+
+zad4()
