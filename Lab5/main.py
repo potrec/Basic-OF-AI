@@ -216,26 +216,64 @@ def zadanie3():
                             loss='categorical_crossentropy',
                             metrics=('accuracy'))
         return model
-    model = KerasClassifier(build_fn=build_model, verbose=0)
-    param_grid = {
-        'n_hidden': [[64,64,64], [128,128,128], [64,64,64,64], [128,128,128,128]],
-        'n_neurons': [32, 64, 128, 256],
-        'activation': ['relu', 'tanh', 'sigmoid'],
-        'optimizer': [Adam, RMSprop, SGD],
-        'learning_rate': reciprocal(1e-4, 1e-2),
-        'batch_size': [32, 64, 128, 256],
-        'epochs': [100, 200, 300, 400]\
-    }
-    grid = RandomizedSearchCV(model, param_grid, cv=3, n_iter=10, verbose=2)
-    grid.fit(X, y)
-    print(grid.best_params_)
-    # grid = GridSearchCV(estimator=model, param_grid=param_grid, cv=3)
-    grid_result = grid.fit(X, y)
 
-    print('Best score: ', grid_result.best_score_)
-    print('Best params: ', grid_result.best_params_)
-    print('Best estimator: ', grid_result.best_estimator_)
-    print('Best index: ', grid_result.best_index_)
+    model = KerasClassifier(build_fn=build_model, verbose=0) # verbose=0 - nie wyswietla informacji o epokach
+    # parametry do wyszukiwania
+    # Liczba warstw
+    layers = [[64], [128], [64, 64], [128, 128]]
+    # Liczb neuronow w warstwie
+    neurons = [16, 32, 64, 128]
+    # Funkcja aktywacji
+    activation = ['relu', 'tanh', 'sigmoid']
+    # Optymalizator
+    optimizer = [Adam, RMSprop, SGD]
+    # Prędkość nauczania
+    learning_rate = [0.001, 0.01, 0.1, 0.2, 0.3]
+    # parametry do wyszukiwania
+    param_grid = dict(layers=layers, activation=activation, optimizer=optimizer, learning_rate=learning_rate, batch_size=[32, 64], epochs=[10])
+    # wyszukiwanie siatkowe
+    grid = GridSearchCV(estimator=model, param_grid=param_grid, cv=3)
+    grid_result = grid.fit(X, y)
+    # najlepsze parametry
+    print("Najlepsze parametry: %s z wynikiem %f" % (grid_result.best_params_, grid_result.best_score_))
+
+    # layers = [[64,64,64], [128,128,128], [256,256,256]]  # liczba neuronow w warstwach
+    # activations = ['relu', 'tanh'] # funkcje aktywacji
+    # optimizers = [Adam, RMSprop, SGD] # optymalizatory
+    # learning_rates = [0.001, 0.01, 0.1] # predkosci nauczania
+    # param_grid = dict(layers=layers, activation=activations, optimizer=optimizers, learning_rate=learning_rates)
+    # grid = GridSearchCV(estimator=model, param_grid=param_grid, cv=5)
+    # X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.2)
+    # scaler = StandardScaler()
+    # X_train = scaler.fit_transform(X_train)
+    # X_test = scaler.transform(X_test)
+    # grid_result = grid.fit(X_train, y_train)
+    # print(grid_result.best_score_)
+    # print(grid_result.best_params_)
+    # print(grid_result.best_estimator_)
+
+
+
+    # model = KerasClassifier(build_fn=build_model, verbose=0)
+    # param_grid = {
+    #     'n_hidden': [[64,64,64], [128,128,128], [64,64,64,64], [128,128,128,128]],
+    #     'n_neurons': [32, 64, 128, 256],
+    #     'activation': ['relu', 'tanh', 'sigmoid'],
+    #     'optimizer': [Adam, RMSprop, SGD],
+    #     'learning_rate': reciprocal(1e-4, 1e-2),
+    #     'batch_size': [32, 64, 128, 256],
+    #     'epochs': [100, 200, 300, 400]\
+    # }
+    # grid = RandomizedSearchCV(model, param_grid, cv=3, n_iter=10, verbose=2)
+    # grid.fit(X, y)
+    # print(grid.best_params_)
+    # # grid = GridSearchCV(estimator=model, param_grid=param_grid, cv=3)
+    # grid_result = grid.fit(X, y)
+    #
+    # print('Best score: ', grid_result.best_score_)
+    # print('Best params: ', grid_result.best_params_)
+    # print('Best estimator: ', grid_result.best_estimator_)
+    # print('Best index: ', grid_result.best_index_)
 
 
 
