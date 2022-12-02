@@ -163,14 +163,6 @@ def zadanie2():
     X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.2)
     accs = []
     scaler = StandardScaler()
-    #przetestuj siec z parametry jak liczba warstw, liczba neuronow, funkcje aktywacji, optymalizator, prędkość uczenia
-    # krotka z liczbą warstw, liczbą neuronów, funkcją aktywacji, optymalizatorem, prędkością uczenia
-    # dla każdego zestawu parametrów wykonaj walidację krzyżową
-    # dla każdego zestawu parametrów wyznacz średnią dokładność
-    # dla każdego zestawu parametrów wyznacz odchylenie standardowe dokładności
-    # wybierz zestaw parametrów, który daje najlepszą średnią dokładność
-
-
     for train_index, test_index in KFold(5).split(X_train):
         X_train_cv = X_train[train_index,:]
         X_test_cv = X_train[test_index,:]
@@ -182,14 +174,109 @@ def zadanie2():
         y_pred = model.predict(X_test_cv)
         y_pred = np.argmax(y_pred, axis=1)
         y_test_cv = np.argmax(y_test_cv, axis=1)
-        acc = accuracy_score(y_test_cv, y_pred)
-        accs.append(acc)
+        accs.append(accuracy_score(y_test_cv, y_pred))
     print(accs)
     print(np.mean(accs))
 
+def zadanie3():
+    # Napisz skrypt, który pozwoli na dokonanie wyszukiwania siatkowego w celu
+    # znalezienia najbardziej obiecujących wartości hiperparametrów. Przetestuj takie parametry,
+    # jako liczba warstw, liczba neuronów w warstwie, funkcja aktywacji, optymalizator, prędkość
+    # nauczania. Uwzględnij zjawisko przetrenowania – oznacza to, że najlepszy wynik
+    # nie koniecznie będzie po ostatniej epoce uczenia sieci.
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.datasets import load_digits
+    data = load_digits()
+    X = data.data
+    y = data.target
+    y = pd.Categorical(y)
+    y = pd.get_dummies(y).values
+    class_num = y.shape[1]
+
+
+    from keras.wrappers.scikit_learn import KerasClassifier
+    from scipy.stats import reciprocal
+    from keras.models import Sequential
+    from keras.layers import Input, Dense
+    from keras.optimizers import Adam, RMSprop, SGD
+    from keras.utils import plot_model
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.model_selection import train_test_split
+    from sklearn.model_selection import RandomizedSearchCV, GridSearchCV
+
+    def build_model(layers, activation, optimizer, learning_rate):
+        model = Sequential()
+        model.add(Dense(layers[0], input_shape = (X.shape[1],), activation = activation))
+        for i in range(1, len(layers)):
+            model.add(Dense(layers[i], activation = activation))
+        model.add(Dense(class_num, activation = 'softmax'))
+        model.compile(optimizer= optimizer(learning_rate),
+                            loss='categorical_crossentropy',
+                            metrics=('accuracy'))
+        return model
+    model = KerasClassifier(build_fn=build_model, verbose=0)
+    param_grid = {
+        'n_hidden': [[64,64,64], [128,128,128], [64,64,64,64], [128,128,128,128]],
+        'n_neurons': [32, 64, 128, 256],
+        'activation': ['relu', 'tanh', 'sigmoid'],
+        'optimizer': [Adam, RMSprop, SGD],
+        'learning_rate': reciprocal(1e-4, 1e-2),
+        'batch_size': [32, 64, 128, 256],
+        'epochs': [100, 200, 300, 400]\
+    }
+    grid = RandomizedSearchCV(model, param_grid, cv=3, n_iter=10, verbose=2)
+    grid.fit(X, y)
+    print(grid.best_params_)
+    # grid = GridSearchCV(estimator=model, param_grid=param_grid, cv=3)
+    grid_result = grid.fit(X, y)
+
+    print('Best score: ', grid_result.best_score_)
+    print('Best params: ', grid_result.best_params_)
+    print('Best estimator: ', grid_result.best_estimator_)
+    print('Best index: ', grid_result.best_index_)
+
+
+
+
+    # X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.2, random_state=2022)
+    # scaler=StandardScaler()
+    # X_train=scaler.fit_transform(X_train)
+    # X_test=scaler.transform(X_test)
+    # num_epochs=10
+    #
+    # def build_model(n_hidden, n_neurons, learning_rate, activation,optimizer):
+    #     model = Sequential()
+    #     model.add(Dense(n_neurons, input_shape = (X.shape[1],), activation = activation))
+    #     for layer in range(n_hidden):
+    #         model.add(Dense(n_neurons, activation=activation))
+    #     model.add(Dense(class_num, activation='softmax'))
+    #     model.compile(optimizer=optimizer(learning_rate), loss='categorical_crossentropy', metrics=('accuracy'))
+    #     return model
+    # #%%
+    # # RANDOMIZED SEARCH
+    # keras_classifier=KerasClassifier(build_model)
+    # # w randomized search mozna dac wiecej kombinacji bo sa sprawdzane losowe z nich
+    # param_distribs={
+    #     'n_hidden': [0,1,2,3],
+    #     'n_neurons': np.arange(1,100),
+    #     'learning_rate': reciprocal(3e-4, 3e-2),
+    #     'activation': ['relu','selu','softmax'],
+    #     'optimizer': [SGD,Adam,RMSprop]
+    # }
+    # rnd_search_cv=RandomizedSearchCV(keras_classifier, param_distribs, n_iter=10, cv=5)
+    # rnd_search_cv.fit(X_train, y_train, epochs=num_epochs)
+    #
+    # best_params_from_random=rnd_search_cv.best_params_
+    # best_model_from_random=rnd_search_cv.best_estimator_
+    #
+    # print(best_params_from_random,best_model_from_random)
 
 
 
 
 
 zadanie2()
+# zadanie3()
+
